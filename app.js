@@ -24,11 +24,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+const DB = process.env.DB_URL;
 
-mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser:true, useUnifiedTopology:true}).then(()=>{
-    console.log("connected with mongoDB");
+mongoose.connect(DB, {
+    useNewUrlParser:true, 
+    useUnifiedTopology:true
+}).then(()=>{
+    console.log("Connection Successfull!");
 }).catch((err)=>{
-    console.log("ERROR");
+    console.log(err);
 }); 
 
 const userSchema = new mongoose.Schema({
@@ -118,7 +122,7 @@ app.get("/submit", (req,res)=>{
 app.post("/submit", (req,res)=>{
     const submittedSecret = req.body.secret;
 
-    console.log(req.user);
+    // console.log(req.user);
     User.findById(req.user.id, function(err, foundUser){
         if(err){
             console.log(err)
@@ -177,11 +181,11 @@ app.post("/login",(req,res)=>{
 
 
 
+const PORT = process.env.PORT || 3000;
 
 
 
-
-app.listen(3000, function() {
+app.listen(PORT, function() {
   console.log("Server started on port 3000");
 });
 
